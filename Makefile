@@ -17,16 +17,23 @@ SRCS		=	$(foreach element, $(SRC), $(SRC_DIR)/$(element))
 
 all: $(NAME)
 
-$(NAME): $(SRCS) $(INC_DIR)/$(INC)
+$(NAME): $(LIBFT)
+	$(info [x] Compiling ft_printf library)
+	@ar rs $(NAME) $(OBJS)
+	@ranlib $(NAME)
+
+$(LIBFT): $(OBJS) 
+	$(info [x] Compiling libft library)
 	@cd $(LIBFT) && make re
 	@mv $(LIBFT)/libft.a $(NAME)
+
+$(OBJS):
 	$(info [x] Compiling src files in .o files)
 	@gcc $(CFLAGS) -I$(INC_DIR) -I$(LIBFT_D) $(SRCS)
+
 	$(info [x] Move .o files in obj dir)
 	@mv *.o $(OBJ_DIR)
-	$(info [x] Compiling library)
-	@ar rs $(NAME) $(OBJS)
-	ranlib $(NAME)
+
 
 clean:
 	@/bin/rm -f $(OBJS)

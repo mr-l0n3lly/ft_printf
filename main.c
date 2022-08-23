@@ -1,19 +1,16 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: apavalac <apavalac@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/22 19:33:29 by apavalac          #+#    #+#             */
-/*   Updated: 2022/07/03 22:08:34 by apavalac         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include "ft_printf.h"
+#include <stdio.h>
 
 int main(void)
 {
-    ft_putstr("Hello world\n");
+    ft_printf("Hello world\n");
     ft_printf("");
 
+    // Printf testing to see how its working
+    printf("#%X\n", 23);
+
+    printf("%g\n%#g\n%G\n%#G\n%#g\n", (double)0, (double)0, (double)0, (double)0, (double)0);
+
+    printf("%.2G", (double)32.3);
     return (0);
 }
