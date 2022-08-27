@@ -1,8 +1,5 @@
-
 #include "ft_printf.h"
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
+
 
 typedef struct  s_flag
 {
@@ -43,9 +40,30 @@ t_arg   *ft_initiate(t_arg *tmp)
 
 void    ft_print_char(t_arg *arg)
 {
-    char c;
+    char c = (char)va_arg(arg->current, int);
+    arg->n_bytes++;
 
-    c = va_arg(arg->current, int);
+    ft_putchar(c);
+}
+
+void    ft_print_str(t_arg *arg)
+{
+    char *str;
+
+    str = va_arg(arg->current, char*);
+    arg->n_bytes += ft_strlen(str);
+
+    ft_putstr(str);
+}
+
+void    ft_print_number(t_arg *arg)
+{
+    int num;
+
+    num = va_arg(arg->current, int);
+    arg->n_bytes += ft_strlen(ft_itoa(num));
+
+    ft_putnbr(num);
 }
 
 int     ft_parse(t_arg *arg, char *format, int index)
@@ -81,17 +99,22 @@ int     ft_parse(t_arg *arg, char *format, int index)
         case 'c':
             ft_print_char(arg);
             break;
+        case 's':
+            ft_print_str(arg);
+            break;
+        case 'd':
+            ft_print_number(arg);
+            break;
     }
 
     return (++index);
-
 }
 
 int	    ft_printf(char *format, ...)
 {
 	int		i;
     int     n;
-    t_arg *arg;
+    t_arg   *arg;
 
     arg = (t_arg*)malloc(sizeof(t_arg));
     arg->flags = (t_flag*)malloc(sizeof(t_flag));
@@ -108,12 +131,9 @@ int	    ft_printf(char *format, ...)
 
 	while (format[i])
 	{
-		if (format[i] == '%')
-		{
+		if (format[i] == '%') {
 			i = ft_parse(arg, format, i + 1);
-		}
-        else
-        {
+		} else {
             ft_putchar(format[i]);
             i++;
         }
