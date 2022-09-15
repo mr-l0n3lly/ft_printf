@@ -1,113 +1,52 @@
 #include "ft_printf.h"
 
-
-typedef struct  s_flag
+void    ft_print_state(t_arg *tmp)
 {
-    int         sign;
-    int         zero;
-    int         percent;
-    int         space;
-    int         zero_padding;
-    int         point;
-    int         dash;
-}               t_flag;
-
-typedef struct  s_arg
-{
-    va_list     current;
-    int         width;
-    int         precision;
-    int         print_length;
-    int         n_bytes;
-    t_flag      *flags;
-}               t_arg;
+    printf("Width: %d\n", tmp->width);
+    printf("MaxWidth(precision): %d\n", tmp->max_width);
+    printf("n-bytes: %d\n", tmp->n_bytes);
+    printf("Dash: %d\n", tmp->flags->dash);
+    printf("point: %d\n", tmp->flags->point);
+    printf("sign: %d\n", tmp->flags->sign);
+    printf("space: %d\n", tmp->flags->space);
+    printf("zero: %d\n", tmp->flags->zero);
+    printf("zero_padding: %d\n", tmp->flags->zero_padding);
+    printf("h: %d\n", tmp->flags->h);
+    printf("j: %d\n", tmp->flags->j);
+    printf("z: %d\n", tmp->flags->z);
+    printf("l: %d\n", tmp->flags->l);
+}
 
 t_arg   *ft_initiate(t_arg *tmp)
 {
     tmp->width = 0;
-    tmp->precision = 0;
-    tmp->n_bytes = 0;
+    tmp->max_width = 0;
     tmp->flags->dash = 0;
-    tmp->flags->percent = 0;
     tmp->flags->point = 0;
     tmp->flags->sign = 0;
     tmp->flags->space = 0;
     tmp->flags->zero = 0;
     tmp->flags->zero_padding = 0;
+    tmp->flags->h = 0;
+    tmp->flags->l = 0;
+    tmp->flags->j = 0;
+    tmp->flags->z = 0;
 
     return (tmp);
 }
 
-void    ft_print_char(t_arg *arg)
-{
-    char c = (char)va_arg(arg->current, int);
-    arg->n_bytes++;
-
-    ft_putchar(c);
-}
-
-void    ft_print_str(t_arg *arg)
-{
-    char *str;
-
-    str = va_arg(arg->current, char*);
-    arg->n_bytes += ft_strlen(str);
-
-    ft_putstr(str);
-}
-
-void    ft_print_number(t_arg *arg)
-{
-    int num;
-
-    num = va_arg(arg->current, int);
-    arg->n_bytes += ft_strlen(ft_itoa(num));
-
-    ft_putnbr(num);
-}
-
-int     ft_parse(t_arg *arg, char *format, int index)
+int     ft_parse(t_arg *arg, const char *format, int index)
 {
     while (ft_strchr("%sSpdDioOuUxXcC", format[index]) == NULL)
     {
-        switch (format[index])
-        {
-            case '-':
-                arg->flags->dash = 1;
-                break;
-            case '%':
-                arg->flags->percent = 1;
-                break;
-            case '.':
-                arg->flags->point = 1;
-                break;
-            case '+':
-                arg->flags->sign = 1;
-                break;
-            case ' ':
-                arg->flags->space = 1;
-                break;
-            case '0':
-                arg->flags->zero_padding = 1;
-        }
+        ft_get_modifiers(arg, format, index);
+        ft_get_width(arg, format, index);
+        ft_get_flags(arg, format, index);
 
         index++;
     }
 
-    switch (format[index])
-    {
-        case 'c':
-            ft_print_char(arg);
-            break;
-        case 's':
-            ft_print_str(arg);
-            break;
-        case 'd':
-            ft_print_number(arg);
-            break;
-    }
-
-    return (++index);
+    return ft_get_conversion(arg, format, index);
 }
 
 int	    ft_printf(char *format, ...)
@@ -127,20 +66,25 @@ int	    ft_printf(char *format, ...)
     }
 
     ft_initiate(arg);
+    arg->n_bytes = 0;
+
 	va_start(arg->current, format);
 
 	while (format[i])
 	{
-		if (format[i] == '%') {
+        if (format[i] == '%') {
 			i = ft_parse(arg, format, i + 1);
+//            ft_print_state(arg);
+            ft_initiate(arg);
 		} else {
-            ft_putchar(format[i]);
+            ft_put_char(arg, format[i]);
             i++;
         }
 	}
 
     n = arg->n_bytes;
 	va_end(arg->current);
+
     free(arg->flags);
     free(arg);
 
