@@ -1,22 +1,5 @@
 #include "ft_printf.h"
 
-void    ft_print_state(t_arg *tmp)
-{
-    printf("Width: %d\n", tmp->width);
-    printf("MaxWidth(precision): %d\n", tmp->max_width);
-    printf("n-bytes: %d\n", tmp->n_bytes);
-    printf("Dash: %d\n", tmp->flags->dash);
-    printf("point: %d\n", tmp->flags->point);
-    printf("sign: %d\n", tmp->flags->sign);
-    printf("space: %d\n", tmp->flags->space);
-    printf("zero: %d\n", tmp->flags->zero);
-    printf("zero_padding: %d\n", tmp->flags->zero_padding);
-    printf("h: %d\n", tmp->flags->h);
-    printf("j: %d\n", tmp->flags->j);
-    printf("z: %d\n", tmp->flags->z);
-    printf("l: %d\n", tmp->flags->l);
-}
-
 t_arg   *ft_initiate(t_arg *tmp)
 {
     tmp->width = 0;
@@ -74,7 +57,6 @@ int	    ft_printf(char *format, ...)
 	{
         if (format[i] == '%') {
 			i = ft_parse(arg, format, i + 1);
-//            ft_print_state(arg);
             ft_initiate(arg);
 		} else {
             ft_put_char(arg, format[i]);

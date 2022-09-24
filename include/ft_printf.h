@@ -45,13 +45,18 @@ typedef struct  s_arg
 int     ft_printf(char  *format, ...);
 t_arg   *ft_initiate(t_arg *);
 void    ft_print_char(t_arg*);
-void    ft_print_str(t_arg*);
+void    ft_print_str(t_arg*, char*);
+void    ft_print_s(t_arg*);
 void    ft_print_number(t_arg*);
+void    ft_print_unsigned_number(t_arg *arg);
 int     ft_get_conversion(t_arg*, const char*, int);
 int     ft_parse(t_arg *, const char *, int);
 void    ft_put_char(t_arg*, char);
 void    ft_get_modifiers(t_arg*, const char *, int);
 void    ft_get_width(t_arg*, const char *, int);
 void    ft_get_flags(t_arg*, const char *, int);
+void    ft_put_str(t_arg *arg, char *str);
+void    ft_print_right_width(t_arg *arg, void (*)(t_arg*, char *), char *);
+void    ft_print_left_width(t_arg *arg, void (*)(t_arg*, char *), char *);
 
 #endif

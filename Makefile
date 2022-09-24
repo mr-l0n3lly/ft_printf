@@ -58,9 +58,4 @@ fclean:	clean
 
 re: fclean all
 
-main: main.c
-	gcc -I$(INC_DIR) -I$(LIBFT_I) -c $<
-	gcc $@.o -L . -lftprintf -o $@
-	rm -f $@.o
-
 .PHONY: all, clean, fclean, re, obj, main
