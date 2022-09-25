@@ -78,7 +78,7 @@ void    ft_get_modifiers(t_arg* arg, const char *format, int index)
 
 void    ft_get_width(t_arg *arg, const char *format, int index)
 {
-    if (ft_isdigit(format[index]) == 1 && format[index] != '0')
+    if (ft_isdigit(format[index]) != 0 && format[index] != '0')
     {
         if (arg->flags->point)
         {

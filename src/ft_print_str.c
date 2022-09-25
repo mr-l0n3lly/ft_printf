@@ -21,17 +21,20 @@ void    ft_print_s(t_arg *arg)
 
 void    ft_print_str(t_arg *arg, char* str)
 {
+    int len = ft_strlen(str);
+
     if (arg->max_width != 0)
     {
-        arg->width = arg->width - arg->max_width + 1;
-
-        if (arg->width < 0)
-        {
-            arg->width = 0;
-        }
-
         str = ft_strsub((char*)str, 0, arg->max_width);
     }
+
+    arg->width = arg->width - len + 1;
+
+    if (arg->width < 0)
+    {
+        arg->width = 0;
+    }
+
 
     if (arg->flags->dash)
     {
